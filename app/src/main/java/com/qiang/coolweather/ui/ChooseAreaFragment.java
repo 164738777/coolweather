@@ -1,6 +1,7 @@
-package com.qiang.coolweather;
+package com.qiang.coolweather.ui;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -8,6 +9,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.qiang.coolweather.R;
 import com.qiang.coolweather.base.BaseFragment;
 import com.qiang.coolweather.base.Constant;
 import com.qiang.coolweather.db.City;
@@ -61,12 +63,22 @@ public class ChooseAreaFragment extends BaseFragment {
     @Override
     protected void initAll() {
         lv.setOnItemClickListener((parent, view, position, id) -> {
-            if (currentLevel == Constant.LEVEL_PROVINCE) {
-                selectedProvince = provinces.get(position);
-                queryCities();
-            } else if (currentLevel == Constant.LEVEL_CITY) {
-                selectedCity = cities.get(position);
-                queryCounties();
+            switch (currentLevel) {
+                case Constant.LEVEL_PROVINCE:
+                    selectedProvince = provinces.get(position);
+                    queryCities();
+                    break;
+                case Constant.LEVEL_CITY:
+                    selectedCity = cities.get(position);
+                    queryCounties();
+                    break;
+                case Constant.LEVEL_COUNTY:
+                    String weatherId = counties.get(position).getWeatherId();
+                    Intent intent = new Intent(getActivity(), WeatherActivity.class);
+                    intent.putExtra(Constant.KEY_WEATHER_ID, weatherId);
+                    startActivity(intent);
+                    getActivity().finish();
+                    break;
             }
         });
 
@@ -110,7 +122,7 @@ public class ChooseAreaFragment extends BaseFragment {
             }
             updateListView(Constant.LEVEL_PROVINCE);
         } else {
-            queryFromServer(Constant.BASE_PATH, "province");
+            queryFromServer(Constant.BASE_PATH_CITY, "province");
         }
     }
 
@@ -126,7 +138,7 @@ public class ChooseAreaFragment extends BaseFragment {
             updateListView(Constant.LEVEL_CITY);
         } else {
             int provinceCode = selectedProvince.getProvinceCode();
-            queryFromServer(Constant.BASE_PATH + provinceCode, "city");
+            queryFromServer(Constant.BASE_PATH_CITY + provinceCode, "city");
         }
     }
 
@@ -143,7 +155,7 @@ public class ChooseAreaFragment extends BaseFragment {
         } else {
             int provinceCode = selectedProvince.getProvinceCode();
             int cityCode = selectedCity.getCityCode();
-            queryFromServer(Constant.BASE_PATH + provinceCode + "/" + cityCode, "county");
+            queryFromServer(Constant.BASE_PATH_CITY + provinceCode + "/" + cityCode, "county");
         }
     }
 
