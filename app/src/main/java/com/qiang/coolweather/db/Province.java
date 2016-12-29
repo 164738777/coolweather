@@ -36,4 +36,9 @@ public class Province extends DataSupport{
     public void setProvinceCode(int provinceCode) {
         this.provinceCode = provinceCode;
     }
+
+    public Province(String provinceName,int provinceCode) {
+        this.provinceCode = provinceCode;
+        this.provinceName = provinceName;
+    }
 }
