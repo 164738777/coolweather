@@ -12,6 +12,26 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         jackOptions.enabled = true
     }
+    signingConfigs{
+        config{
+//            storeFile file('C:/CoolWeather.jks')
+//            storePassword '13467985'
+//            keyAlias 'qiang'
+//            keyPassword '13467985'
+            storeFile file(KEY_PATH)
+            storePassword KEY_PASS
+            keyAlias ALIAS_NAME
+            keyPassword ALIAS_PASS
+        }
+    }
+//    productFlavors{
+//        qihoo{
+//            applicationId "com.qiang.coolweather.qihoo"
+//        }
+//        baidu{
+//            applicationId "com.qiang.coolweather.baidu"
+//        }
+//    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -20,6 +40,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
 }
