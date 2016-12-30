@@ -1,0 +1,35 @@
+[33mcommit 7b44bc0f40e5ee05b872501827359ec8022b9f27[m
+Author: qiang <anworkmail_q@126.com>
+Date:   Fri Dec 30 11:52:44 2016 +0800
+
+    新增切换城市和手动更新天气
+
+[33mcommit 5e4ed7715c8293e2266497ab59aa2b773fa475e3[m
+Author: qiang <anworkmail_q@126.com>
+Date:   Thu Dec 29 18:36:30 2016 +0800
+
+    加入显示天气信息功能
+
+[33mcommit f6cd3ba5e1ac00de714ebd86fb267a267146ea52[m
+Author: qiang <anworkmail_q@126.com>
+Date:   Thu Dec 29 11:57:46 2016 +0800
+
+    完成遍历省市县三级列表
+
+[33mcommit ff897ad6b2b6f38cbb39eb24285e14b6ab3f60a3[m
+Author: qiang <anworkmail_q@126.com>
+Date:   Wed Dec 28 21:58:17 2016 +0800
+
+    加入创建数据库和表的各项配置
+
+[33mcommit 6f4c5e4caa3eca2cba1498957cef197ef47e8ff3[m
+Author: qiang <anworkmail_q@126.com>
+Date:   Wed Dec 28 20:04:45 2016 +0800
+
+    First commit.
+
+[33mcommit 4470b730c766f7d026a45d4ece55fc651b7067b1[m
+Author: 164738777 <164738777@users.noreply.github.com>
+Date:   Wed Dec 28 19:59:23 2016 +0800
+
+    Initial commit

@@ -1,6 +1,7 @@
 package com.qiang.coolweather.ui;
 
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -29,6 +30,7 @@ import com.qiang.coolweather.gson.Forecast;
 import com.qiang.coolweather.gson.Now;
 import com.qiang.coolweather.gson.Suggestion;
 import com.qiang.coolweather.gson.Weather;
+import com.qiang.coolweather.service.AutoUpdateService;
 import com.qiang.coolweather.util.HttpUtil;
 import com.qiang.coolweather.util.Utility;
 
@@ -181,6 +183,9 @@ public class WeatherActivity extends BaseActivity {
         tvWash.setText(carWash);
         tvSport.setText(sport);
         svWeather.setVisibility(View.VISIBLE);
+
+        Intent intent = new Intent(WeatherActivity.this, AutoUpdateService.class);
+        startService(intent);
     }
 
     public void requestWeather(String weatherId) {
