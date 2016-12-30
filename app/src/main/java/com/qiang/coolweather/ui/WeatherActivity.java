@@ -7,8 +7,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -31,6 +35,7 @@ import com.qiang.coolweather.util.Utility;
 import java.io.IOException;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -61,6 +66,15 @@ public class WeatherActivity extends BaseActivity {
     ScrollView svWeather;
     @BindView(R.id.iv_pic)
     ImageView ivPic;
+    @BindView(R.id.swipeRefresh)
+    SwipeRefreshLayout swipeRefresh;
+    @BindView(R.id.btn_nav)
+    Button btnNav;
+    @BindView(R.id.drawerLayout)
+    DrawerLayout drawerLayout;
+
+
+    private String weatherId;
 
     @Override
     protected int getLayoutRes() {
@@ -83,10 +97,11 @@ public class WeatherActivity extends BaseActivity {
         if (weatherString != null) {
             //有缓存直接解析
             Weather weather = Utility.handleWeatherResponse(weatherString);
+            weatherId = weather.basic.weatherId;
             showWeatherInfo(weather);
         } else {
             //没有缓存就上网
-            String weatherId = getIntent().getStringExtra(Constant.KEY_WEATHER_ID);
+            weatherId = getIntent().getStringExtra(Constant.KEY_WEATHER_ID);
             svWeather.setVisibility(View.INVISIBLE);
             requestWeather(weatherId);
         }
@@ -97,6 +112,11 @@ public class WeatherActivity extends BaseActivity {
         } else {
             loadPic();
         }
+
+        swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
+        swipeRefresh.setOnRefreshListener(() -> {
+            requestWeather(weatherId);
+        });
     }
 
     private void loadPic() {
@@ -163,7 +183,7 @@ public class WeatherActivity extends BaseActivity {
         svWeather.setVisibility(View.VISIBLE);
     }
 
-    private void requestWeather(String weatherId) {
+    public void requestWeather(String weatherId) {
         String weatherUrl = Constant.BASE_PATH_WEATHER + Constant.REQUEST_KEY_CITY + weatherId + Constant.BASE_KEY;
         HttpUtil.sendOkHttpRequest(weatherUrl, new Callback() {
             @Override
@@ -179,15 +199,24 @@ public class WeatherActivity extends BaseActivity {
                     } else {
                         Toast.makeText(WeatherActivity.this, getResources().getString(R.string.failed_load_weather), Toast.LENGTH_SHORT).show();
                     }
+                    swipeRefresh.setRefreshing(false);
                 });
             }
 
             @Override
             public void onFailure(Call call, IOException e) {
-                Toast.makeText(WeatherActivity.this, getResources().getString(R.string.failed_load_weather), Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+                runOnUiThread(() -> {
+                    Toast.makeText(WeatherActivity.this, getResources().getString(R.string.failed_load_weather), Toast.LENGTH_SHORT).show();
+                    swipeRefresh.setRefreshing(false);
+                });
             }
         });
         loadPic();
     }
 
+    @OnClick(R.id.btn_nav)
+    public void onClick() {
+        drawerLayout.openDrawer(GravityCompat.START);
+    }
 }
